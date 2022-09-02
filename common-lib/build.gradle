@@ -39,5 +39,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     // Euphony
-    implementation 'co.euphony.lib:euphony:0.8.1'
+    implementation 'co.euphony.lib:euphony:0.8.1.1'
 }
