@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 rootProject.name = "eupi-camera"
 include ':eupi-camera'
 include ':eupi-shutter'
+include ':common-lib'
