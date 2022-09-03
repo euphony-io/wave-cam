@@ -1,6 +1,7 @@
 package com.euphonyio.eupi_shutter
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -9,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,7 +27,7 @@ class ShutterActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background) {
-                    ShutterPreview()
+                    ShutterScreen()
                 }
             }
         }
@@ -33,9 +35,33 @@ class ShutterActivity : ComponentActivity() {
 }
 
 @Composable
-fun CameraChange(str: String){
+fun ShutterScreen(){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        CameraButton("Shutter")
+        Spacer(modifier = Modifier.height(100.dp))
+        CameraButton("Switch")
+    }
+}
+
+@Composable
+fun CameraButton(str: String){
+    var context = LocalContext.current
+
     Button(
-        onClick = {  },
+        onClick = {
+          if(str == "Shutter") {
+              Toast.makeText(context, "셔터", Toast.LENGTH_SHORT).show()
+          }
+          else {
+              Toast.makeText(context, "카메라 전환", Toast.LENGTH_SHORT).show()
+          }
+        },
         colors = ButtonDefaults.buttonColors(
             backgroundColor = Purple200
         ),
@@ -44,8 +70,7 @@ fun CameraChange(str: String){
         Text(
             text = str,
             fontSize = 18.sp,
-            color = colorResource(id = R.color.white),
-            fontWeight = FontWeight.Bold
+            color = colorResource(id = R.color.white)
         )
     }
 }
@@ -53,15 +78,5 @@ fun CameraChange(str: String){
 @Preview(showBackground = true)
 @Composable
 fun ShutterPreview() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        CameraChange("Shutter")
-        Spacer(modifier = Modifier.height(100.dp))
-        CameraChange("Change")
-    }
+    ShutterScreen()
 }
