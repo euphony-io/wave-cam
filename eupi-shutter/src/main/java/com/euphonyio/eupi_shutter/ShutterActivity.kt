@@ -12,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,24 +42,26 @@ fun ShutterScreen(){
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        CameraButton("Shutter")
+        CameraButton(Command.SHUTTER)
         Spacer(modifier = Modifier.height(100.dp))
-        CameraButton("Switch")
+        CameraButton(Command.SWITCH)
     }
 }
 
 @Composable
-fun CameraButton(str: String){
+fun CameraButton(command: Command){
     var context = LocalContext.current
 
     Button(
         onClick = {
-          if(str == "Shutter") {
-              Toast.makeText(context, "셔터", Toast.LENGTH_SHORT).show()
-          }
-          else {
-              Toast.makeText(context, "카메라 전환", Toast.LENGTH_SHORT).show()
-          }
+            when(command){
+                Command.SHUTTER -> {
+                    Toast.makeText(context, "셔터", Toast.LENGTH_SHORT).show()
+                }
+                Command.SWITCH -> {
+                    Toast.makeText(context, "카메라 전환", Toast.LENGTH_SHORT).show()
+                }
+            }
         },
         colors = ButtonDefaults.buttonColors(
             backgroundColor = Purple200
@@ -68,7 +69,7 @@ fun CameraButton(str: String){
         shape = RoundedCornerShape(24.dp)
     ) {
         Text(
-            text = str,
+            text = command.toString(),
             fontSize = 18.sp,
             color = colorResource(id = R.color.white)
         )
