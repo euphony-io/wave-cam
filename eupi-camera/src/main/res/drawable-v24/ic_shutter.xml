@@ -14,7 +14,8 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<paths xmlns:android="http://schemas.android.com/apk/res/android">
-    <external-media-path name="media" android:path="@{string/app_name}/" />
-    <files-path name="files" path="."/>
-</paths>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true" android:drawable="@drawable/ic_shutter_pressed" />
+    <item android:state_focused="true" android:drawable="@drawable/ic_shutter_focused" />
+    <item android:drawable="@drawable/ic_shutter_normal" />
+</selector>
