@@ -23,15 +23,17 @@ import androidx.camera.core.*
 import androidx.camera.core.ImageCapture.Metadata
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.core.content.getSystemService
 import androidx.core.net.toFile
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.Navigation
+import co.euphony.rx.EuRxManager
+import co.euphony.util.EuOption
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.euphonyio.common_lib.Constants
 import com.euphonyio.eupi_camera.CameraActivity
 import com.euphonyio.eupi_camera.KEY_EVENT_ACTION
 import com.euphonyio.eupi_camera.KEY_EVENT_EXTRA
@@ -63,6 +65,7 @@ typealias LumaListener = (luma: Double) -> Unit
  * - Image analysis
  */
 class CameraFragment : Fragment() {
+    private val TAG = javaClass.simpleName
 
     private var _fragmentCameraBinding: FragmentCameraBinding? = null
 
@@ -84,6 +87,11 @@ class CameraFragment : Fragment() {
 
     private val displayManager by lazy {
         requireContext().getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
+    }
+
+    /** Listening capture frequency for eupi */
+    private val euRxManager: EuRxManager by lazy {
+        EuRxManager(EuOption.ModeType.EUPI)
     }
 
     /** Blocking camera operations are performed using this executor */
@@ -200,6 +208,9 @@ class CameraFragment : Fragment() {
 
             // Set up the camera and its use cases
             setUpCamera()
+
+            // Set up EuRxManger listen
+            setUpEuPI()
         }
     }
 
@@ -219,6 +230,18 @@ class CameraFragment : Fragment() {
 
         // Enable or disable switching between cameras
         updateCameraSwitchButton()
+    }
+
+    private fun setUpEuPI() {
+        euRxManager.setOnWaveKeyDown(Constants.FREQUENCY_CAPTURE) {
+            cameraUiContainerBinding?.cameraCaptureButton?.simulateClick()
+        }
+
+        if (euRxManager.listen()) {
+            Log.d(TAG, "euRxManager.listen success")
+        } else {
+            Log.d(TAG, "euRxManager.listen failed")
+        }
     }
 
     /** Initialize CameraX, and prepare to bind the camera use cases  */
