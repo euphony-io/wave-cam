@@ -47,7 +47,14 @@ class ShutterActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background) {
-                    ShutterScreen()
+                    ShutterScreen(
+                        onShutterClick = {
+                            euTxManager.callEuPI(1.1, EuTxManager.EuPIDuration.LENGTH_LONG)
+                        },
+                        onSwitchClick = {
+                            euTxManager.callEuPI(1.1, EuTxManager.EuPIDuration.LENGTH_SHORT)
+                        }
+                    )
                 }
             }
         }

@@ -18,7 +18,10 @@ import com.euphonyio.eupi_shutter.Command
 import com.euphonyio.eupi_shutter.ui.theme.Purple200
 
 @Composable
-fun ShutterScreen(){
+fun ShutterScreen(
+    onShutterClick:() -> Unit,
+    onSwitchClick:() -> Unit
+){
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -60,8 +63,8 @@ fun CameraButton(command: Command){
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ShutterPreview() {
-    ShutterScreen()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun ShutterPreview() {
+//    ShutterScreen()
+//}
