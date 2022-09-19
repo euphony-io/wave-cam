@@ -42,12 +42,12 @@ fun CameraButton(command: Command){
     Button(
         onClick = {
             when(command){
-                Command.SHUTTER -> {
-                    Toast.makeText(context, "셔터", Toast.LENGTH_SHORT).show()
-                }
-                Command.SWITCH -> {
-                    Toast.makeText(context, "카메라 전환", Toast.LENGTH_SHORT).show()
-                }
+//                Command.SHUTTER -> {
+//                    Toast.makeText(context, "셔터", Toast.LENGTH_SHORT).show()
+//                }
+//                Command.SWITCH -> {
+//                    Toast.makeText(context, "카메라 전환", Toast.LENGTH_SHORT).show()
+//                }
             }
         },
         colors = ButtonDefaults.buttonColors(

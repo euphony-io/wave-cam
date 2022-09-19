@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import co.euphony.tx.EuTxManager
 import co.euphony.util.EuOption
+import com.euphonyio.common_lib.Constants
 import com.euphonyio.eupi_shutter.ui.screen.ShutterScreen
 import com.euphonyio.eupi_shutter.ui.theme.EupicameraTheme
 
@@ -49,10 +50,10 @@ class ShutterActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background) {
                     ShutterScreen(
                         onShutterClick = {
-                            euTxManager.callEuPI(1.1, EuTxManager.EuPIDuration.LENGTH_LONG)
+                            euTxManager.callEuPI(Constants.FREQUENCY_CAPTURE.toDouble(), EuTxManager.EuPIDuration.LENGTH_LONG)
                         },
                         onSwitchClick = {
-                            euTxManager.callEuPI(1.1, EuTxManager.EuPIDuration.LENGTH_SHORT)
+                            euTxManager.callEuPI(Constants.FREQUENCY_SWITCH_CAMERA.toDouble(), EuTxManager.EuPIDuration.LENGTH_SHORT)
                         }
                     )
                 }
@@ -60,8 +61,8 @@ class ShutterActivity : ComponentActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
 
         when {
             ContextCompat.checkSelfPermission(this,
