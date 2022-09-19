@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.euphonyio.eupi_camera"
-        minSdk 21
+        minSdk 26
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -80,4 +80,10 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    // Euphony
+    implementation "co.euphony.lib:euphony:0.8.1.2"
+
+    // implement common-lib
+    implementation project(":common-lib")
 }

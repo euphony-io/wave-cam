@@ -236,6 +236,9 @@ class CameraFragment : Fragment() {
         euRxManager.setOnWaveKeyDown(Constants.FREQUENCY_CAPTURE) {
             cameraUiContainerBinding?.cameraCaptureButton?.simulateClick()
         }
+        euRxManager.setOnWaveKeyDown(Constants.FREQUENCY_SWITCH_CAMERA) {
+            cameraUiContainerBinding?.cameraSwitchButton?.simulateClick()
+        }
 
         if (euRxManager.listen()) {
             Log.d(TAG, "euRxManager.listen success")
