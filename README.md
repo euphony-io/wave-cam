@@ -28,5 +28,5 @@ And Use the 'eupi-shutter' to manipulate the camera whatever you want.
 
 # Test
 
-<img width="270" height="400" src="https://user-images.githubusercontent.com/81459048/191280654-f577251b-ecd5-420e-977d-ad94bbe38877.gif"/>
+<img width="280" height="410" src="https://user-images.githubusercontent.com/81459048/191280654-f577251b-ecd5-420e-977d-ad94bbe38877.gif"/> <img width="280" height="410" src="https://user-images.githubusercontent.com/81459048/191287692-27b43047-f63e-44e3-9509-ad428ee5e1fe.gif"/>
 
