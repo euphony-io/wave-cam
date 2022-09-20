@@ -1,83 +1,89 @@
 package com.euphonyio.eupi_shutter
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
+import co.euphony.tx.EuTxManager
+import co.euphony.util.EuOption
+import com.euphonyio.common_lib.Constants
+import com.euphonyio.eupi_shutter.ui.screen.ShutterScreen
 import com.euphonyio.eupi_shutter.ui.theme.EupicameraTheme
-import com.euphonyio.eupi_shutter.ui.theme.Purple200
 
 class ShutterActivity : ComponentActivity() {
+
+    private val euTxManager: EuTxManager by lazy {
+        EuTxManager()
+    }
+
+    private val audioPermissionCallback =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (it) {
+                Toast.makeText(this, "마이크 권한 허용 승인", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "마이크 권한을 반드시 허용해야 합니다.", Toast.LENGTH_SHORT).show()
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                intent.data = Uri.parse("package:$packageName")
+                intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+                startActivity(intent)
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        euTxManager.setMode(EuOption.ModeType.EUPI)
+
         setContent {
             EupicameraTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background) {
-                    ShutterScreen()
+                    ShutterScreen(
+                        onShutterClick = {
+                            euTxManager.callEuPI(Constants.FREQUENCY_CAPTURE.toDouble(), EuTxManager.EuPIDuration.LENGTH_LONG)
+                        },
+                        onSwitchClick = {
+                            euTxManager.callEuPI(Constants.FREQUENCY_SWITCH_CAMERA.toDouble(), EuTxManager.EuPIDuration.LENGTH_SHORT)
+                        }
+                    )
                 }
             }
         }
     }
-}
 
-@Composable
-fun ShutterScreen(){
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        CameraButton(Command.SHUTTER)
-        Spacer(modifier = Modifier.height(100.dp))
-        CameraButton(Command.SWITCH)
-    }
-}
+    override fun onResume() {
+        super.onResume()
 
-@Composable
-fun CameraButton(command: Command){
-    var context = LocalContext.current
-
-    Button(
-        onClick = {
-            when(command){
-                Command.SHUTTER -> {
-                    Toast.makeText(context, "셔터", Toast.LENGTH_SHORT).show()
-                }
-                Command.SWITCH -> {
-                    Toast.makeText(context, "카메라 전환", Toast.LENGTH_SHORT).show()
-                }
+        when {
+            ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED -> {
+                Log.d("ShutterActivity", "PERMISSION_GRANTED")
             }
-        },
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = Purple200
-        ),
-        shape = RoundedCornerShape(24.dp)
-    ) {
-        Text(
-            text = command.toString(),
-            fontSize = 18.sp,
-            color = colorResource(id = R.color.white)
-        )
+            shouldShowRequestPermissionRationale(Manifest.permission.RECORD_AUDIO) -> {
+                audioPermissionCallback.launch(Manifest.permission.RECORD_AUDIO)
+            }
+            else -> {
+                audioPermissionCallback.launch(Manifest.permission.RECORD_AUDIO)
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        euTxManager.stop()
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ShutterPreview() {
-    ShutterScreen()
-}
+
+
