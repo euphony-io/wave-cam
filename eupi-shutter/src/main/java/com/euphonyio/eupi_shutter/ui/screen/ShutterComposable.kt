@@ -29,25 +29,30 @@ fun ShutterScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        CameraButton(Command.SHUTTER)
+        CameraButton(Command.SHUTTER, onShutterClick)
         Spacer(modifier = Modifier.height(100.dp))
-        CameraButton(Command.SWITCH)
+        CameraButton(Command.SWITCH, onSwitchClick)
     }
 }
 
 @Composable
-fun CameraButton(command: Command){
+fun CameraButton(
+    command: Command,
+    onItemClick:() -> Unit,
+){
     var context = LocalContext.current
-
+3
     Button(
         onClick = {
             when(command){
-//                Command.SHUTTER -> {
-//                    Toast.makeText(context, "셔터", Toast.LENGTH_SHORT).show()
-//                }
-//                Command.SWITCH -> {
-//                    Toast.makeText(context, "카메라 전환", Toast.LENGTH_SHORT).show()
-//                }
+                Command.SHUTTER -> {
+                    Toast.makeText(context, "카메라 셔터", Toast.LENGTH_SHORT).show()
+                    onItemClick()
+                }
+                Command.SWITCH -> {
+                    Toast.makeText(context, "카메라 전환", Toast.LENGTH_SHORT).show()
+                    onItemClick()
+                }
             }
         },
         colors = ButtonDefaults.buttonColors(
